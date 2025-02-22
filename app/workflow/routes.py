@@ -37,11 +37,15 @@ def profile_page(username):
     next_url = url_for(
         'workflow.profile_page', username=current_user.username, page=posts.next_num,
         ) \
-    if posts.has_next else None
+    if posts.has_next else url_for(
+        'workflow.profile_page', username=current_user.username, page=1,
+        )
     prev_url = url_for(
         'workflow.profile_page', username=current_user.username, page=posts.prev_num,
         ) \
-    if posts.has_prev else None
+    if posts.has_prev else url_for(
+        'workflow.profile_page', username=current_user.username, page=1,
+        )
 
 
     return render_template(
@@ -80,11 +84,15 @@ def chatroom_page(username):
     next_url = url_for(
         'workflow.chatroom_page', page=posts.next_num, username=current_user.username,
         ) \
-    if posts.has_next else None
+    if posts.has_next else url_for(
+        'workflow.chatroom_page', username=current_user.username, page=1,
+        )
     prev_url = url_for(
         'workflow.chatroom_page', page=posts.prev_num, username=current_user.username,
         ) \
-    if posts.has_prev else None
+    if posts.has_prev else url_for(
+        'workflow.chatroom_page', username=current_user.username, page=1,
+        )
 
     return render_template(
         'workflow/chatroom.html',

@@ -62,9 +62,9 @@ def get_all_posts():
                         error_out=False
                        )
     next_url = url_for('posts.get_all_posts', page=posts.next_num) \
-    if posts.has_next else None
+    if posts.has_next else url_for('posts.get_all_posts', page=1)
     prev_url = url_for('posts.get_all_posts', page=posts.prev_num) \
-    if posts.has_prev else None
+    if posts.has_prev else url_for('posts.get_all_posts', page=1)
 
     return render_template(
         "posts/index.html", 
