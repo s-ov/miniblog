@@ -1,0 +1,52 @@
+<nav class="navbar m-2 rounded fixed-top">
+    <ul>
+      <li>
+        <svg>
+          <text x="10%" y="10%" dy=".15em" text-anchor="right">
+            Miniblog
+          </text>
+        </svg>
+      </li>
+      <span style="margin-left: 30em;"><li></li></span>
+        
+      {% if current_user.is_anonymous %}
+        <li><a href="" class="nav-link">Головна</a></li>
+        <li>
+          <a href="{{ url_for('user.login') }}" class="nav-link">
+            Login
+          </a>
+        </li>
+        <li>
+          <a href="{{ url_for('user.register') }}" class="nav-link">
+            Реєстрація
+          </a>
+        </li>
+      {% else %}
+          <li>
+            <a href="{{ url_for('posts.get_all_posts') }}" class="nav-link">
+              All posts
+            </a>
+          </li>
+          
+          <li>
+            <a href="{{ url_for('workflow.profile_page', username=current_user.username) }}" 
+               class="nav-link">
+              {{ current_user.username }}
+            </a>            
+          </li>
+          <li>
+            <a href="{{ url_for('workflow.chatroom_page', username=current_user.username) }}" 
+               class="nav-link">
+              Chatroom
+            </a>            
+          </li>
+          <li>
+            <a href="{{ url_for('user.logout') }}" class="nav-link">
+              Logout
+            </a>
+          </li>
+      {% endif %}
+
+    </ul>
+  </nav>
+  

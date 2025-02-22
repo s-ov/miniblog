@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    {% if current_user.is_anonymous %}
+        <div class="container text-dark fw-bold mt-5">
+            <h2>You are on an Index page.</br>
+                Log in/Register to start communication on chat.
+            </h2>
+        </div>
+    {% else %}
+        
+    {% endif %}
+        
+{% endblock %}

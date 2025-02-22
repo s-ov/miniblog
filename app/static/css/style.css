@@ -1,0 +1,146 @@
+:root {
+  --color1: #edf3f3;
+  --color2:  #5d7dac;
+  --color3:  #74287a;
+  --color4: black;
+  
+  --clr-active: #060885;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  overflow-x: auto;
+  color: var(--color1);
+  background-image: url('/static/images/lucerne.jpg');
+  background-size: cover; /* Makes the image cover the entire background */
+
+}
+
+
+@import url("https://fonts.googleapis.com/css2?family=Russo+One&display=swap");
+
+    svg {
+        font-family: "Russo One", sans-serif;
+        width: 100%; height: 100%;
+    }
+    svg text {
+        animation: stroke 5s infinite alternate;
+        stroke-width: 2;
+        stroke: rgba(3, 10, 53, 0.877);
+        font-size: 30px;
+    }
+    @keyframes stroke {
+        0%   {
+            fill: rgba(3, 10, 53, 0.877); stroke: rgba(248, 245, 44, 1);
+            stroke-dashoffset: 25%; stroke-dasharray: 0 50%; stroke-width: 2;
+        }
+        70%  {fill: rgba(3, 10, 53, 0.877); stroke: rgba(248, 245, 44, 1); }
+        80%  {fill: rgba(3, 10, 53, 0.877); stroke: rgba(248, 245, 44, 1); stroke-width: 3; }
+        100% {
+            fill: rgba(248, 245, 44, 1); stroke: rgba(3, 10, 53, 0.877);
+            stroke-dashoffset: -25%; stroke-dasharray: 50% 0; stroke-width: 0;
+        }
+    }
+
+nav, footer {
+  height: 3.5em;
+  background-color: var(--color2);
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+  justify-content: flex-end;
+  padding: 0;
+  margin: 0;
+}
+
+.image {
+  background-image: url('../images/and_chr512.png');
+  width: 60px;
+  height: 60px;
+  margin-right: 45em;
+}
+
+a.nav-link {
+  color: var(--color1);
+  text-decoration: none;
+  font-size: 1.2em;
+  margin-right: 1.5em;
+}
+li a.nav-link:hover {
+  color: var(--clr-active);
+}
+
+a.nav-link .active {
+  color: lime;
+}
+
+
+img {
+  width: 12rem; 
+  height: 12rem; 
+  padding: 5px;
+  border: 3px darkcyan double; 
+  border-radius: 50%;
+  margin: 5px;
+}
+e
+
+h3 {
+  border: 3px double var(--color1);
+  border-radius: 6px;
+}
+
+a {
+  color: var(--color3);
+  text-decoration: none;
+}
+
+.line {
+  width: 100px;
+  height: 2px;
+  background-color: var(--color1);
+  margin: 15px auto 30px;
+}
+
+.container-create-post {
+  display: flex; 
+  height: 80vh; 
+}
+
+.col {
+  flex: 1; /* Both columns take equal width by default */
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: add shadow for styling */
+}
+
+.right {
+  display: flex; /* Ensures the child content respects scrolling */
+  flex-direction: column; /* Stack child elements vertically */
+  overflow-y: scroll; /* Enables vertical scrolling */
+}
+
+.scrollable-content {
+  padding: 1rem;
+  height: fit-content; /* Let the content determine its height */
+}
+
+.paginator ul li a {
+  background-color: var(--color2);
+  color: var(--color4);
+  margin: 0.5em;
+  padding: 0.3em;
+  text-decoration: none;
+}
+
+footer {
+  font-size: 1.2em;
+}
+footer p a {
+  color: var(--color3);
+  font-weight: bold;
+  
+}

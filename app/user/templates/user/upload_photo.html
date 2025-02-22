@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Upload Profile Picture</h2>
+<form method="POST" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+    <p>{{ form.profile_picture.label }} {{ form.profile_picture() }}</p>
+    <p>{{ form.submit() }}</p>
+</form>
+{% endblock %}
+
+<img src="{{ url_for('static', filename='uploads/' + user.profile_picture) }}" alt="Profile Picture">

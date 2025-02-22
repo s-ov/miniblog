@@ -1,0 +1,14 @@
+{% for post in posts %}
+    <p>
+        <span class="bg-light  mb-5 p-2 rounded">
+            <img src="" alt="ava"> </br> 
+            {{ post.body }}
+            <p>
+                <a href="{{ url_for('posts.delete_post', post_id=post.id) }}"
+                   class="btn btn-success">
+                    Delete
+                </a>
+            </p>
+        </span>
+    </p>
+{% endfor %}

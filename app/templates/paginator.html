@@ -1,0 +1,14 @@
+<div class="paginator">
+    <ul class="d-flex list-unstyled m-1 p-1 rounded">
+        <li class="previous{% if not prev_url %} disabled{% endif %}">
+            <a href="{{ prev_url }}">
+                <span aria-hidden="true">&#10594;</span> Previous
+            </a>
+        </li>
+        <li class="next{% if not next_url %} disabled{% endif %}">
+            <a href="{{ next_url }}">
+                Next <span aria-hidden="true">&#10596;</span>
+            </a>
+        </li>
+    </ul>
+</div>
