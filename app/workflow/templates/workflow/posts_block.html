@@ -1,10 +1,10 @@
 {% for post in posts %}
     <p>
         <span class="bg-light  mb-5 p-2 rounded">
-            {% if current_user.profile_picture %}
+            {% if post.user.profile_picture %}
                 <img src="{{ url_for(
                         'static', 
-                        filename='uploads/profile_pics/' + current_user.profile_picture) }}" 
+                        filename='uploads/profile_pics/' + post.user.profile_picture) }}" 
                     alt="ava"
                 > </br> 
             {% else %}  

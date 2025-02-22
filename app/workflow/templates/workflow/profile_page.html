@@ -35,8 +35,9 @@
                         </div> 
                     </td>
                 </tr>
-            </table>    
-            <div class="btn-group">
+            </table>  
+              
+            <div class="btn-group mb-5">
                 <a href="{{ url_for('user.upload_profile_picture', user_id=current_user.id) }}" 
                    class="btn btn-primary">
                    Edit avatar
@@ -44,8 +45,9 @@
                 <a href="{{ url_for('user.edit_profile') }}" class="btn btn-primary">
                     Edit profile
                 </a>
-              </div>
-              {% include 'paginator.html' %}
+                {% include 'paginator.html' %}
+            </div>
+              
         </div>
 
         <div class="col right">
