@@ -45,12 +45,12 @@
                     Edit profile
                 </a>
               </div>
+              {% include 'paginator.html' %}
         </div>
 
         <div class="col right">
           <div class="scrollable-content">
-            
-            {% include 'paginator.html' %}
+        
             {% include 'workflow/posts_block.html' %}
           </div>
         </div>

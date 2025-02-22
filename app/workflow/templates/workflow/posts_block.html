@@ -1,11 +1,19 @@
 {% for post in posts %}
     <p>
         <span class="bg-light  mb-5 p-2 rounded">
-            <img src="{{ url_for(
+            {% if current_user.profile_picture %}
+                <img src="{{ url_for(
+                        'static', 
+                        filename='uploads/profile_pics/' + current_user.profile_picture) }}" 
+                    alt="ava"
+                > </br> 
+            {% else %}  
+                <img src="{{ url_for(
                     'static', 
-                    filename='uploads/profile_pics/' + current_user.profile_picture) }}" 
-                alt="ava"
-            > </br> 
+                    filename='uploads/profile_pics/default.jpg') }}" 
+                    alt="ava"
+                > </br>     
+            {% endif %} 
             {{ post.body }}
             <p>
                 <a href="{{ url_for('posts.delete_post', post_id=post.id) }}"
