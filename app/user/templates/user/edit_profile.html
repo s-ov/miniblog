@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="container w- 50 text-dark fw-bold mt-5">
+    <h2>{{ title }}</h2>
+    <form method="POST" action="{{ url_for('user.edit_profile') }}">
+        {{ form.hidden_tag() }}
+
+        <p>
+            {{ form.username.label }}<br>
+            {{ form.username(
+                size=32, 
+                value=current_user.username,
+                ) 
+            }}<br>
+            {% for error in form.username.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.bio.label }}<br>
+            {{ form.bio(cols=64, rows=4) }}<br>
+            {% for error in form.username.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit(class="btn btn-primary") }}</p>
+        
+    </form>
+
+    <a href="{{ url_for(
+                    'workflow.profile_page', 
+                    username=current_user.username,
+                    ) 
+            }}" class="btn btn-primary"
+    >
+        Назад до профілю
+    </a>
+</div>
+
+{% endblock %}

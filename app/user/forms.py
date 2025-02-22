@@ -74,7 +74,7 @@ class EditProfileForm(FlaskForm):
     "Handle user profile updating form"
 
     username = StringField('Ім\'я: ', validators=[DataRequired()])
-    about_me = TextAreaField('Про мене', validators=[Length(min=0, max=140)])
+    bio = TextAreaField('Про мене', validators=[Length(min=0, max=140)])
     submit = SubmitField('Зберегти')
 
     def __init__(self, original_username, *args, **kwargs):

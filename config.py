@@ -13,7 +13,7 @@ class Config:
     LANGUAGES = ['en', 'es']
     DEBUG = os.environ.get("FLASK_DEBUG", False)
 
-    UPLOAD_FOLDER = os.path.join(os.getcwd(), 'static/uploads')
+    UPLOAD_FOLDER = os.path.join(os.getcwd(), 'app/static/uploads/profile_pics')
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
     os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 

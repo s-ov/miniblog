@@ -26,7 +26,7 @@ def create_app():
     app.register_blueprint(posts_bp)
 
     from app.workflow.routes import workflow_bp
-    app.register_blueprint(workflow_bp)
+    app.register_blueprint(workflow_bp, url_prefix='/workflow')
     
     from app.user.models import User
     from app.posts.models import Post

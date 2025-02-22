@@ -10,7 +10,18 @@
             <table class="table table-hover">
                 <tr>
                     <td width="8em">  
-                        <img src="" />  
+                        {% if current_user.profile_picture %}
+                            <img src="{{ url_for(
+                                            'static', 
+                                            filename='uploads/profile_pics/' + current_user.profile_picture) }}" 
+                                 alt="Profile Picture"
+                            >
+                        {% else %}
+                            <img src="{{ url_for('static', filename='uploads/profile_pics/default.jpg') }}" 
+                                 alt="Default Profile Picture"
+                            >
+                        {% endif %}
+ 
                     </td>
                 </tr>
                 <tr>    
@@ -25,11 +36,20 @@
                     </td>
                 </tr>
             </table>    
-            
+            <div class="btn-group">
+                <a href="{{ url_for('user.upload_profile_picture', user_id=current_user.id) }}" 
+                   class="btn btn-primary">
+                   Edit avatar
+                </a>
+                <a href="{{ url_for('user.edit_profile') }}" class="btn btn-primary">
+                    Edit profile
+                </a>
+              </div>
         </div>
 
         <div class="col right">
           <div class="scrollable-content">
+            
             {% include 'paginator.html' %}
             {% include 'workflow/posts_block.html' %}
           </div>

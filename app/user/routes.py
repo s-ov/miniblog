@@ -33,8 +33,9 @@ from app.user.models import User
 from app.user.services import allowed_file
 
 user_bp = Blueprint(
-    'user', __name__, template_folder='templates',
-
+    'user',
+    __name__, 
+    template_folder='templates',
     )
     
 
@@ -153,6 +154,7 @@ def reset_password(token):
 
 @user_bp.route('/upload/<int:user_id>', methods=['GET', 'POST'])
 def upload_profile_picture(user_id):
+    "Upload profile picture"
     user = User.query.get_or_404(user_id)
     form = ProfilePictureForm()
 
@@ -160,16 +162,20 @@ def upload_profile_picture(user_id):
         file = form.profile_picture.data
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
-            file_path = os.path.join(Config['UPLOAD_FOLDER'], filename)
+            file_path = os.path.join(Config.UPLOAD_FOLDER, filename)
             file.save(file_path)
 
             user.profile_picture = filename
             db.session.commit()
-
             flash('Profile picture updated!', 'success')
-            return redirect(url_for('profile.view_profile', user_id=user.id))
+            return redirect(url_for('user.index',))
 
-    return render_template('upload.html', form=form, user=user)
+    return render_template(
+        'user/upload_photo.html', 
+        title='Upload photo',
+        form=form, 
+        user=user,
+        )
 
 
 @user_bp.route('/edit_profile', methods=['GET', 'POST'])
@@ -179,14 +185,14 @@ def edit_profile():
     form = EditProfileForm(current_user.username)
     if form.validate_on_submit():
         current_user.username = form.username.data
-        current_user.about_me = form.about_me.data
+        current_user.bio = form.bio.data
         db.session.commit()
         flash('Зміни були збережені.')
         return redirect(url_for('user.edit_profile'))
         
     elif request.method == 'GET':
         form.username.data = current_user.username
-        form.about_me.data = current_user.about_me
+        form.bio.data = current_user.bio
 
     return render_template(
         'user/edit_profile.html', 
