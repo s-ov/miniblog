@@ -63,6 +63,10 @@ nav ul {
   height: 60px;
   margin-right: 45em;
 }
+p span img {
+  width: 3em;
+  height: 3em;
+}
 
 a.nav-link {
   color: var(--color1);
