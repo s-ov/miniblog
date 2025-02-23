@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block app_content %}
+    <h1>{{ _('Трапилась неочікувана помилка') }}</h1>
+    <p>Адміністратор повідомлений. Вибачте за незручності!</p>
+    <p>
+        <a href="{{ url_for('index') }}">
+            На головну
+        </a>
+    </p>
+{% endblock %}

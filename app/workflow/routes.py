@@ -7,6 +7,7 @@ from app.extensions import db
 from app.user.models import User
 from app.posts.models import Post
 from app.posts.forms import PostForm
+from .models import get_followed_posts
 
 workflow_bp = Blueprint(
     'workflow', __name__, template_folder='templates',
@@ -102,3 +103,11 @@ def chatroom_page(username):
         next_url=next_url,
         prev_url=prev_url,
     )
+
+
+@workflow_bp.route('/feed')
+@login_required
+def feed():
+    """Display posts from followed users only."""
+    posts = get_followed_posts(current_user).all()
+    return render_template('workflow/feed.html', posts=posts)

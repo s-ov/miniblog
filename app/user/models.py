@@ -59,7 +59,3 @@ class User(UserMixin, db.Model):
                                 followers.c.followed_id == user.id
                                 )\
                             .count() > 0
-
-    # def avatar(self, size):
-    #     digest = md5(self.email.lower().encode('utf-8')).hexdigest()
-    #     return f'https://www.gravatar.com/avatar/{digest}?d=identicon&s={size}'
