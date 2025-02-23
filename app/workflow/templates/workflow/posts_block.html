@@ -18,8 +18,9 @@
                     > 
                 </a></br>     
             {% endif %} 
-            {{ post.body }}</br>
-            <small>{{ post.timestamp.strftime('%Y-%m-%d %H:%M') }}</small>
+            
+            <small>{{ post.timestamp.strftime('%Y-%m-%d %H:%M') }}</small></br>
+            {{ post.body }}
             <p>
                 <a href="{{ url_for('posts.delete_post', post_id=post.id) }}"
                    class="btn btn-success">

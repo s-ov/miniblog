@@ -10,6 +10,7 @@ class Config:
                                              'sqlite:///' + os.path.join(basedir, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     POSTS_PER_PAGE = 5
+    USERS_PER_PAGE = 1
     LANGUAGES = ['en', 'es']
     DEBUG = os.environ.get("FLASK_DEBUG", False)
 

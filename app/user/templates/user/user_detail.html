@@ -12,11 +12,29 @@
             alt="default.png"
         > 
     {% endif %}
-</p> 
-<p>Last seen:{{ user.last_seen.strftime('%Y-%m-%d %H:%M') }}</p>
-<p>{{ user.bio }}</p>    
+</p>
 
-<div class="btn-group">
-    <a href="#" class="btn btn-primary">Follow</a>
-    <a href="#" class="btn btn-primary">Unfollow</a>
+<div class="bg-info w-50 text-dark fw-bold mt-5 p-2 rounded">
+    <h4>{{ user.username }}</h4> 
+    <p>Last seen:{{ user.last_seen.strftime('%Y-%m-%d %H:%M') }}</p>
+    {% if user.bio %}
+        <p>{{ user.bio }}</p>  
+    {% endif %}  
 </div>
+
+<div class="btn-group m-1">
+    {% if current_user.is_authenticated and current_user.id != user.id %}
+        {% if current_user.is_following(user) %}
+            <a href="{{ url_for('workflow.unfollow', user_id=user.id) }}" 
+               class="btn btn-danger">
+                 Unfollow
+            </a>
+        {% else %}
+            <a href="{{ url_for('workflow.follow', user_id=user.id) }}" 
+               class="btn btn-primary">
+                Follow
+        </a>
+        {% endif %}
+    {% endif %}
+</div>
+<hr>

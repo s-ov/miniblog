@@ -205,12 +205,35 @@ def edit_profile():
 @login_required
 def get_users_list():
     "Get a list of all users."
-    users = User.query.all()
+
+    page = request.args.get('page', 1, type=int)
+    users = User.query.filter(User.id != current_user.id)\
+                    .order_by(User.username.desc())\
+                    .paginate(
+                        page=page, 
+                        per_page=Config.USERS_PER_PAGE, 
+                        error_out=False
+                    )
+    next_url = url_for(
+        'user.get_users_list', username=current_user.username, page=users.next_num,
+        ) \
+    if users.has_next else url_for(
+        'user.get_users_list', username=current_user.username, page=1,
+        )
+    prev_url = url_for(
+        'user.get_users_list', username=current_user.username, page=users.prev_num,
+        ) \
+    if users.has_prev else url_for(
+        'user.get_users_list', username=current_user.username, page=1,
+        )
+
 
     return render_template(
         'user/users_list.html', 
         title='Users list',
         users=users,
+        next_url=next_url,
+        prev_url=prev_url,
     )
 
 

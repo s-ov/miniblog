@@ -7,7 +7,7 @@
           </text>
         </svg>
       </li>
-      <span style="margin-left: 30em;"><li></li></span>
+      <span style="margin-left: 20em;"><li></li></span>
         
       {% if current_user.is_anonymous %}
         <li><a href="" class="nav-link">Головна</a></li>
@@ -27,7 +27,11 @@
               All posts
             </a>
           </li>
-          
+          <li>
+            <a href="{{ url_for('user.get_users_list') }}" class="nav-link">
+              Find friends
+            </a>
+          </li>
           <li>
             <a href="{{ url_for('workflow.profile_page', username=current_user.username) }}" 
                class="nav-link">
