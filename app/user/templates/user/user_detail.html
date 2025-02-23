@@ -1,0 +1,22 @@
+<p>
+    {% if user.profile_picture %}
+        <img src="{{ url_for(
+                    'static', 
+                    filename='uploads/profile_pics/' + user.profile_picture) }}" 
+            alt="ava"
+            > 
+    {% else %} 
+        <img src="{{ url_for(
+                    'static', 
+                    filename='uploads/profile_pics/default.jpg') }}" 
+            alt="default.png"
+        > 
+    {% endif %}
+</p> 
+<p>Last seen:{{ user.last_seen.strftime('%Y-%m-%d %H:%M') }}</p>
+<p>{{ user.bio }}</p>    
+
+<div class="btn-group">
+    <a href="#" class="btn btn-primary">Follow</a>
+    <a href="#" class="btn btn-primary">Unfollow</a>
+</div>

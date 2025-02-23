@@ -201,6 +201,33 @@ def edit_profile():
         )
 
 
+@user_bp.route('/all_users', methods=['GET'])
+@login_required
+def get_users_list():
+    "Get a list of all users."
+    users = User.query.all()
+
+    return render_template(
+        'user/users_list.html', 
+        title='Users list',
+        users=users,
+    )
+
+
+@user_bp.route('/get_user/<username>', methods=['GET'])
+@login_required
+def get_user(username):
+    "Get a specific user's profile."
+
+    user = User.query.filter_by(username=username).first()
+
+    return render_template(
+        'user/users_list.html', 
+        title="User's profile",
+        user=user,
+    )
+
+
 @user_bp.route('/follow/<username>', methods=['POST'])
 @login_required
 def follow(username):
