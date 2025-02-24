@@ -55,7 +55,7 @@ class User(UserMixin, db.Model):
             self.followed.remove(user)
 
     def is_following(self, user):
-        return self.followed.filter(
-                                followers.c.followed_id == user.id
-                                )\
-                            .count() > 0
+        """Check if the current user follows another user."""
+        if user is None:
+            return False  
+        return self.followed.filter(followers.c.followed_id == user.id).count() > 0

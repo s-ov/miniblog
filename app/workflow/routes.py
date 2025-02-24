@@ -121,11 +121,11 @@ def follow(user_id):
     
     if user_to_follow == current_user:
         flash("You cannot follow yourself!", "warning")
-        return redirect(url_for('user.profile', user_id=user_id))
+        return redirect(url_for('user.get_user_profile', user_id=user_id))
     
     follow_user(current_user, user_to_follow)
     flash(f"You are now following {user_to_follow.username}!", "success")
-    return redirect(url_for('user.profile', user_id=user_id))
+    return redirect(url_for('user.get_user_profile', user_id=user_id))
 
 @workflow_bp.route('/unfollow/<int:user_id>')
 @login_required
@@ -135,4 +135,4 @@ def unfollow(user_id):
     
     unfollow_user(current_user, user_to_unfollow)
     flash(f"You have unfollowed {user_to_unfollow.username}.", "info")
-    return redirect(url_for('user.profile', user_id=user_id))
+    return redirect(url_for('user.get_user_profile', user_id=user_id))
