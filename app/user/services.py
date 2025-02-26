@@ -1,7 +1,8 @@
-from flask import request
+from flask import request, url_for
+from flask_mail import Message
 from urllib.parse import urlparse, urljoin
 from config import Config
-from app.extensions import db
+from app.extensions import db, mail
 
 
 def follow_user(current_user, user_to_follow):
@@ -28,3 +29,21 @@ def is_safe_url(target):
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1]\
         .lower() in Config.ALLOWED_EXTENSIONS
+
+
+def send_reset_email(user):
+    """Sends a password reset email to the user."""
+    token = user.get_reset_token()  # Ensure `get_reset_token()` is implemented in the User model
+    reset_link = url_for('user.reset_password', token=token, _external=True)
+
+    msg = Message(
+        'Password Reset Request',
+        sender='noreply@example.com',
+        recipients=[user.email]
+    )
+    msg.body = f''' To reset your password, visit the following link:
+                    {reset_link}
+                    If you did not make this request, simply ignore this email. 
+                    This link will expire in 30 minutes.
+                '''
+    mail.send(msg)

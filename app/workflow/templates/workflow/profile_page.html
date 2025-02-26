@@ -32,6 +32,10 @@
                             {% if current_user.bio %}
                                 <p>{{ current_user.bio }}</p>
                             {% endif %}
+                            <a href="{{ url_for('user.delete_user_request') }}" 
+                                class="">
+                                    Delete account
+                            </a>
                         </div> 
                     </td>
                 </tr>
@@ -45,6 +49,7 @@
                 <a href="{{ url_for('user.edit_profile') }}" class="btn btn-primary">
                     Edit profile
                 </a>
+                
                 {% include 'paginator.html' %}
             </div>
               

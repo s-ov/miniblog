@@ -1,4 +1,6 @@
+from itsdangerous import URLSafeTimedSerializer as Serializer
 from app import db
+from flask import current_app
 from flask_login import UserMixin
 from werkzeug.security import (
     generate_password_hash, check_password_hash,
@@ -58,3 +60,18 @@ class User(UserMixin, db.Model):
         if user is None:
             return False  
         return self.followed.filter(followers.c.followed_id == user.id).count() > 0
+
+    def get_reset_token(self, expires_sec=1800):
+        """Generate a secure token for password reset (default: 30 minutes)."""
+        s = Serializer(current_app.config['SECRET_KEY'])
+        return s.dumps({'user_id': self.id})
+
+    @staticmethod
+    def verify_reset_token(token, expires_sec=1800):
+        """Verify the token and return the user if valid."""
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            user_id = s.loads(token, max_age=expires_sec)['user_id']
+        except:
+            return None
+        return User.query.get(user_id)

@@ -10,4 +10,3 @@ def get_followed_posts(user):
             ).filter(
                 (followers.c.follower_id == user.id) | (Post.user_id == user.id) 
             ).order_by(Post.timestamp.desc())
-

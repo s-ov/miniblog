@@ -21,12 +21,14 @@
             
             <small>{{ post.timestamp.strftime('%Y-%m-%d %H:%M') }}</small></br>
             {{ post.body }}
+            {% if post.user.id==current_user.id %}
             <p>
                 <a href="{{ url_for('posts.delete_post', post_id=post.id) }}"
                    class="btn btn-success">
                     Delete
                 </a>
             </p>
+            {% endif %}
         </span>
     </p>
 {% endfor %}

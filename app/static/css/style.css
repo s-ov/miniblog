@@ -45,7 +45,7 @@ body {
     }
 
 nav, footer {
-  height: 3.5em;
+  height: 3em;
   background-color: var(--color2);
 }
 

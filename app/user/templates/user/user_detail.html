@@ -22,7 +22,13 @@
     {% endif %}
     {% if user.bio %}
         <p>{{ user.bio }}</p>  
-    {% endif %}  
+    {% endif %} 
+    {% if current_user.is_authenticated and current_user.id == user.id %} 
+        <a href="{{ url_for('user.delete_user_request') }}" 
+            class="btn btn-primary">
+                Delete account
+        </a>
+    {% endif %}
 </div>
 
 <div class="btn-group m-1">
@@ -36,9 +42,9 @@
             <a href="{{ url_for('user.follow', username=user.username) }}" 
                class="btn btn-primary">
                 Follow
-        </a>
+            </a>
         {% endif %}
     {% endif %}
-
+    
 </div>
 <hr>

@@ -93,3 +93,9 @@ class ProfilePictureForm(FlaskForm):
         FileAllowed(['jpg', 'png', 'jpeg', 'gif'], 'Images only!')
     ])
     submit = SubmitField('Upload')
+
+
+class DeleteAccountForm(FlaskForm):
+    """Form to confirm account deletion."""
+    password = PasswordField("Enter your password:", validators=[DataRequired()])
+    submit = SubmitField("Delete Account")
