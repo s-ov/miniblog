@@ -31,7 +31,9 @@ from app.user.forms import (
     )
 from app.user.models import User
 # from app.email import send_email
-from app.user.services import allowed_file
+from app.user.services import (
+    allowed_file, follow_user, unfollow_user,
+    )
 
 user_bp = Blueprint(
     'user',
@@ -254,60 +256,18 @@ def get_user_profile(username):
     )
 
 
-# @user_bp.route('/follow/<username>', methods=['GET', 'POST'])
-# @login_required
-# def follow(username):
-#     "Handle follow user action"
-#     form = EmptyForm()
-#     if form.validate_on_submit():
-#         user = User.query.filter_by(username=username).first()
-#         if user is None:
-#             flash(_(f'User {username} not found.'))
-#             return redirect(url_for('user.index'))
-#         if user == current_user:
-#             flash('You cannot follow yourself!')
-#             return redirect(url_for('user.user_profile', username=username))
-#         current_user.follow(user)
-#         db.session.commit()
-#         flash('You are following {}!'.format(username))
-#         return redirect(url_for('user.user_profile', username=username))
-#     else:
-#         return redirect(url_for('user.index'))
-    
-
-# @user_bp.route('/unfollow/<username>', methods=['GET', 'POST'])
-# @login_required
-# def unfollow(username):
-#     "Handle unfollow user action"
-#     form = EmptyForm()
-#     if form.validate_on_submit():
-#         user = User.query.filter_by(username=username).first()
-#         if user is None:
-#             flash(f'User {username} not found.')
-#             return redirect(url_for('user.index'))
-#         if user == current_user:
-#             flash('You cannot unfollow yourself!')
-#             return redirect(url_for('user.user_profile', username=username))
-#         current_user.unfollow(user)
-#         db.session.commit()
-#         flash(f'You are not following {username}.')
-#         return redirect(url_for('user.user_profile', username=username))
-#     else:
-#         return redirect(url_for('user.index'))
-
-
 @user_bp.route('/follow/<username>', methods=['GET'])
 @login_required
 def follow(username):
     """Follow a user by their username."""
-    user_to_follow = User.query.filter_by(username=username).first_or_404()
+    user = User.query.filter_by(username=username).first_or_404()
 
-    if user_to_follow == current_user:
+    if user == current_user:
         flash("You cannot follow yourself!", "warning")
         return redirect(url_for('user.get_user_profile', username=username))
     
-    follow_user(current_user, user_to_follow)
-    flash(f"You are now following {user_to_follow.username}!", "success")
+    follow_user(current_user, user)
+    flash(f"You are now following {user.username}!", "success")
     return redirect(url_for('user.get_user_profile', username=username))
 
     
@@ -315,22 +275,9 @@ def follow(username):
 @login_required
 def unfollow(username):
     """Unfollow a user by their username."""
-    user_to_unfollow = User.query.filter_by(username=username).first_or_404()
+    user = User.query.filter_by(username=username).first_or_404()
     
-    unfollow_user(current_user, user_to_unfollow)
-    flash(f"You have unfollowed {user_to_unfollow.username}.", "info")
+    unfollow_user(current_user, user)
+    flash(f"You have unfollowed {user.username}.", "info")
     return redirect(url_for('user.get_user_profile', username=username))
 
-
-def follow_user(current_user, user_to_follow):
-    """Allow the current user to follow another user."""
-    if not current_user.is_following(user_to_follow):
-        current_user.followed.append(user_to_follow)
-        db.session.commit()
-
-
-def unfollow_user(current_user, user_to_unfollow):
-    """Allow the current user to unfollow another user."""
-    if current_user.is_following(user_to_unfollow):
-        current_user.followed.remove(user_to_unfollow)
-        db.session.commit()

@@ -11,8 +11,4 @@ class Post(db.Model):
 
     def __repr__(self):
         return f"<Post {self.body}>"
-    
-    def get_posts(self):
-        """Fetches posts related to the user."""
-        return Post.query.filter_by(user_id=self.user_id).all()  
 
