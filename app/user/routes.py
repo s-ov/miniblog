@@ -280,4 +280,3 @@ def unfollow(username):
     unfollow_user(current_user, user)
     flash(f"You have unfollowed {user.username}.", "info")
     return redirect(url_for('user.get_user_profile', username=username))
-
