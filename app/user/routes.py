@@ -9,7 +9,6 @@ from flask import (
     )
 from flask_login import (
     current_user, 
-    login_user, 
     logout_user,
     login_required,
     )
@@ -22,8 +21,6 @@ from flask_babel import _
 from config import Config
 from app.extensions import db
 from app.user.forms import (
-    LoginForm, 
-    RegistrationForm,
     ResetPasswordRequestForm,
     ResetPasswordForm,
     EditProfileForm,
@@ -32,7 +29,6 @@ from app.user.forms import (
     DeleteAccountForm,
     )
 from app.user.models import User
-# from app.email import send_email
 from app.user.services import (
     allowed_file, 
     follow_user, 
@@ -61,66 +57,6 @@ def index():
         'user/index.html', 
         title='Index page',
         )
-
-
-@user_bp.route('/register', methods=['GET', 'POST'])
-def register():
-    "Register a new user"
-
-    if current_user.is_authenticated:
-        return redirect(url_for('user.index'))
-    
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        user = User(
-            username=form.username.data, 
-            email=form.email.data,
-            )
-        user.set_password(form.password.data)
-        
-        db.session.add(user)
-        db.session.commit()
-        flash(_('Your post is now live!'))
-        return redirect(url_for('user.login'))
-    
-    return render_template(
-        'user/register.html', 
-        title='Реєстрація', 
-        form=form,
-        )
-
-
-@user_bp.route('/login', methods=['GET', 'POST'])
-def login():
-    "Login current user"
-
-    if current_user.is_authenticated:
-        return redirect(url_for('user.index'))
-    
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
-
-        if user is None or not user.check_password(form.password.data):
-            flash('Невірно ім\'я чи пароль')
-            return redirect(url_for('user.login'))
-        
-        login_user(user, remember=form.remember_me.data)
-        return redirect(url_for('user.index'))
-
-    return render_template(
-        'user/login.html', 
-        title='Авторизація', 
-        form=form,
-        )
-
-
-@user_bp.route('/logout')
-def logout():
-    "Logout authorized user"
-    
-    logout_user()
-    return redirect(url_for('user.login'))
 
 
 @user_bp.route('/delete_account', methods=['GET', 'POST'])
@@ -153,81 +89,10 @@ def delete_user():
         else:
             flash("Incorrect password. Account not deleted.", "danger")
 
-    return redirect(url_for('user.delete_user_request'))  # Redirect back if failed
-
-@user_bp.route('/reset_password', methods=['GET', 'POST'])
-def reset_password_request():
-    """Handle password reset requests via email."""
-    if current_user.is_authenticated:
-        return redirect(url_for('main.index'))  # Redirect authenticated users
-
-    form = ResetPasswordRequestForm()
-    
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user:
-            send_reset_email(user)  # Send reset email if user exists
-        
-        # Always show the same message to prevent email enumeration attacks
-        flash("If this email is registered, a password reset link has been sent.", "info")
-        return redirect(url_for('auth.login'))
-
-    return render_template('user/reset_password_request.html', form=form)
-
-# @user_bp.route('/reset_password_request', methods=['GET', 'POST'])
-# def reset_password_request():
-#     if current_user.is_authenticated:
-#         return redirect(url_for('user.index'))
-#     form = ResetPasswordRequestForm()
-#     if form.validate_on_submit():
-#         user = User.query.filter_by(email=form.email.data).first()
-#         # if user:
-#         #     send_password_reset_email(user)
-#         flash('Перевірте свій email щодо інструкцій як змінити пароль')
-#         return redirect(url_for('user.login'))
-#     return render_template('user/reset_password_request.html',
-#                             title='Змінити пароль', 
-#                             form=form,
-#                             )
-
-@user_bp.route('/reset_password/<token>', methods=['GET', 'POST'])
-def reset_password(token):
-    """Allow users to reset their password using a valid token."""
-    user = User.verify_reset_token(token)
-    if not user:
-        flash('Invalid or expired token.', 'warning')
-        return redirect(url_for('user.reset_password_request'))
-
-    form = ResetPasswordForm()
-    if form.validate_on_submit():
-        user.set_password(form.password.data)
-        db.session.commit()
-        flash('Your password has been updated. You can now log in.', 'success')
-        return redirect(url_for('auth.login'))
-
-    return render_template('user/reset_password.html', form=form)
-
-# @user_bp.route('/reset_password/<token>', methods=['GET', 'POST'])
-# def reset_password(token):
-#     if current_user.is_authenticated:
-#         return redirect(url_for('user.index'))
-#     user = User.verify_reset_password_token(token)
-#     if not user:
-#         return redirect(url_for('user.index'))
-#     form = ResetPasswordForm()
-#     if form.validate_on_submit():
-#         user.set_password(form.password.data)
-#         db.session.commit()
-#         flash('Ваш пароль змінено успішно.')
-#         return redirect(url_for('user.login'))
-#     return render_template(
-#         'user/reset_password.html', 
-#         title="Змінити пароль", 
-#         form=form,
-#         )
+    return redirect(url_for('user.delete_user_request'))  
 
 
-@user_bp.route('/upload/<int:user_id>', methods=['GET', 'POST'])
+@user_bp.route('/upload/<int:user_id>', methods=['GET', 'POST'])    
 def upload_profile_picture(user_id):
     "Upload profile picture"
     user = User.query.get_or_404(user_id)

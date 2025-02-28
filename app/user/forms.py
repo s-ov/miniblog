@@ -34,13 +34,13 @@ class RegistrationForm(FlaskForm):
 
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()
-        if user is not None:
+        if user:
             raise ValidationError('Користувач з таким іменем вже зареєстрований.')
         
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
-        if user is not None:
-            raise ValidationError('Такий email вже зареєстровано.')
+        if user:
+            raise ValidationError('No such email. First, register.')
 
 
 class LoginForm(FlaskForm):
@@ -54,11 +54,16 @@ class LoginForm(FlaskForm):
 class ResetPasswordRequestForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     submit = SubmitField('Змінити пароль')
+        
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email.data).first()
+        if user is None:
+            raise ValidationError('Такий email вже зареєстровано.')
 
 
 class ResetPasswordForm(FlaskForm):
     password = PasswordField('Пароль', validators=[DataRequired()])
-    password2 = PasswordField(
+    confirm_password = PasswordField(
         'Повторити пароль', 
         validators=[DataRequired(), EqualTo('password')],
         )

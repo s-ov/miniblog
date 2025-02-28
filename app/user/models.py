@@ -1,5 +1,8 @@
-from itsdangerous import URLSafeTimedSerializer as Serializer
+# from itsdangerous import URLSafeTimedSerializer as Serializer
+from itsdangerous import TimedSerializer as Serializer
+import jwt
 from app import db
+from config import Config
 from flask import current_app
 from flask_login import UserMixin
 from werkzeug.security import (
@@ -60,18 +63,32 @@ class User(UserMixin, db.Model):
         if user is None:
             return False  
         return self.followed.filter(followers.c.followed_id == user.id).count() > 0
-
-    def get_reset_token(self, expires_sec=1800):
-        """Generate a secure token for password reset (default: 30 minutes)."""
-        s = Serializer(current_app.config['SECRET_KEY'])
-        return s.dumps({'user_id': self.id})
+    
+    def get_reset_token(self, expires_sec=600):
+        """Generate a secure token for password reset (default: 5 minutes)."""
+        serializer = Serializer(Config.SECRET_KEY, expires_sec=expires_sec)
+        return serializer.dumps({'user_id': self.id}).decode('utf-8')
+    
+    @staticmethod
+    def verify_reset_token(token):
+        serializer = Serializer(Config.SECRET_KEY)
+        try:
+            user_id = serializer.loads(token)['user_id']
+        except:
+            return 
+        return User.query.get(user_id)
+    
+    def get_reset_password_token(self, expires_in=600):
+        """Generate a secure token for password reset (default: 5 minutes)."""
+        return jwt.encode(
+            {'reset_password': self.id, 'exp': datetime.now() + expires_in},
+            Config.SECRET_KEY, algorithm='HS256')
 
     @staticmethod
-    def verify_reset_token(token, expires_sec=1800):
-        """Verify the token and return the user if valid."""
-        s = Serializer(current_app.config['SECRET_KEY'])
+    def verify_reset_password_token(token):
         try:
-            user_id = s.loads(token, max_age=expires_sec)['user_id']
+            id = jwt.decode(token, Config.SECRET_KEY,
+                            algorithms=['HS256'])['reset_password']
         except:
-            return None
-        return User.query.get(user_id)
+            return 
+        return db.session.get(User, id)

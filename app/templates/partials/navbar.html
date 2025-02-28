@@ -12,12 +12,12 @@
       {% if current_user.is_anonymous %}
         <li><a href="" class="nav-link">Головна</a></li>
         <li>
-          <a href="{{ url_for('user.login') }}" class="nav-link">
+          <a href="{{ url_for('auth.login') }}" class="nav-link">
             Login
           </a>
         </li>
         <li>
-          <a href="{{ url_for('user.register') }}" class="nav-link">
+          <a href="{{ url_for('auth.register') }}" class="nav-link">
             Реєстрація
           </a>
         </li>
@@ -45,7 +45,7 @@
             </a>            
           </li>
           <li>
-            <a href="{{ url_for('user.logout') }}" class="nav-link">
+            <a href="{{ url_for('auth.logout') }}" class="nav-link">
               Logout
             </a>
           </li>

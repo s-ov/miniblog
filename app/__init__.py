@@ -19,6 +19,8 @@ def create_app():
     moment.init_app(app)
     babel.init_app(app)
 
+    from app.user.auth_routes import auth_bp
+    app.register_blueprint(auth_bp)
     from app.user.routes import user_bp
     app.register_blueprint(user_bp)
 

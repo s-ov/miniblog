@@ -33,12 +33,12 @@ def allowed_file(filename):
 
 def send_reset_email(user):
     """Sends a password reset email to the user."""
-    token = user.get_reset_token()  # Ensure `get_reset_token()` is implemented in the User model
+    token = user.get_reset_token()  
     reset_link = url_for('user.reset_password', token=token, _external=True)
 
     msg = Message(
         'Password Reset Request',
-        sender='noreply@example.com',
+        sender='noreply@gmail.com',
         recipients=[user.email]
     )
     msg.body = f''' To reset your password, visit the following link:
