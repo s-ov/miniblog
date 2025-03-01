@@ -1,13 +1,13 @@
-from flask_wtf import FlaskForm
-from flask_wtf.file import FileField, FileAllowed
-from wtforms import (
+from flask_wtf import FlaskForm                     # type: ignore
+from flask_wtf.file import FileField, FileAllowed   # type: ignore
+from wtforms import (                               # type: ignore
     StringField, 
     TextAreaField,
     PasswordField, 
     BooleanField, 
     SubmitField,
-    )
-from wtforms.validators import (
+    )                                           
+from wtforms.validators import (                    # type: ignore
     ValidationError, 
     DataRequired, 
     Email, 
@@ -58,7 +58,9 @@ class ResetPasswordRequestForm(FlaskForm):
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
         if user is None:
-            raise ValidationError('Такий email вже зареєстровано.')
+            raise ValidationError(
+                'Такий email не зареєстровано. Зареєструйтусь спочатку.',
+                )
 
 
 class ResetPasswordForm(FlaskForm):

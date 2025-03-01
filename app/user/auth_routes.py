@@ -40,7 +40,7 @@ def register():
         return redirect(url_for('auth.login'))
     
     return render_template(
-        'user/register.html', 
+        'auth/register.html', 
         title='Реєстрація', 
         form=form,
         )
@@ -65,7 +65,7 @@ def login():
         return redirect(url_for('user.index'))
 
     return render_template(
-        'user/login.html', 
+        'auth/login.html', 
         title='Авторизація', 
         form=form,
         )
@@ -78,23 +78,62 @@ def logout():
     return redirect(url_for('auth.login'))
 
 
-@auth_bp.route('/reset_password_request', methods=['GET', 'POST'])
+# @auth_bp.route(
+#         '/reset_password_request', 
+#         methods=['GET', 'POST'], 
+#         endpoint='reset_password_request',
+#         )
+# def reset_password_request():
+#     "Send request to receive email."
+#     if current_user.is_authenticated:
+#         return redirect(url_for('user.index'))
+#     form = ResetPasswordRequestForm()
+#     if form.validate_on_submit():
+#         user_count = User.query.filter_by(email=form.email.data).count()
+#         print(f"Number of users with this email: {user_count}")
+
+#         user = User.query.filter_by(email=form.email.data).first()
+#         print(f"After if => {form.email.data}")
+#         if user is None:
+#             print(f"MY DEBUG => {url_for('auth.reset_password_request')}")
+#             flash('No user with a such email', 'warning')
+#             return redirect(url_for('auth.reset_password_request', _external=False))
+#         send_reset_email(user)
+#         flash('Перевірте свій email щодо інструкцій як змінити пароль', 'info')
+#         return redirect(url_for('auth.login'))
+#     return render_template('auth/reset_password_request.html',
+#                             title='Змінити пароль', 
+#                             form=form,
+#                             )
+@auth_bp.route(
+        '/reset_password_request', 
+        methods=['GET', 'POST'], 
+        endpoint='reset_password_request',
+        )
 def reset_password_request():
+    """Send request to receive email."""
     if current_user.is_authenticated:
         return redirect(url_for('user.index'))
+    
     form = ResetPasswordRequestForm()
+
     if form.validate_on_submit():
+        
         user = User.query.filter_by(email=form.email.data).first()
-        if not user:
-            flash('No user with a such email', 'warning')
-            return redirect(url_for('user.reset_password_request'))
+
+        if user is None:
+            flash('No user with such email', 'warning')
+            return redirect(url_for('auth.reset_password_request', _external=False))
+        
         send_reset_email(user)
         flash('Перевірте свій email щодо інструкцій як змінити пароль', 'info')
         return redirect(url_for('auth.login'))
-    return render_template('user/reset_password_request.html',
-                            title='Змінити пароль', 
-                            form=form,
-                            )
+    
+    else:
+        print("❌ Form validation failed!")
+        print(f"Form errors: {form.errors}")
+
+    return render_template('auth/reset_password_request.html', title='Змінити пароль', form=form)
 
 
 @auth_bp.route('/reset_password/<token>', methods=['GET', 'POST'])
@@ -113,5 +152,5 @@ def reset_password(token):
         flash('Your password has been reset.')
         return redirect(url_for('auth.login'))
     return render_template(
-        'user/reset_password.html', form=form, title='Reset password',
+        'auth/reset_password.html', form=form, title='Reset password',
         )

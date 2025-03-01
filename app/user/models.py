@@ -66,7 +66,7 @@ class User(UserMixin, db.Model):
     
     def get_reset_token(self, expires_sec=600):
         """Generate a secure token for password reset (default: 5 minutes)."""
-        serializer = Serializer(Config.SECRET_KEY, expires_sec=expires_sec)
+        serializer = Serializer(Config.SECRET_KEY, expires_sec)
         return serializer.dumps({'user_id': self.id}).decode('utf-8')
     
     @staticmethod

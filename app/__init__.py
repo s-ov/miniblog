@@ -20,7 +20,7 @@ def create_app():
     babel.init_app(app)
 
     from app.user.auth_routes import auth_bp
-    app.register_blueprint(auth_bp)
+    app.register_blueprint(auth_bp, url_prefix='/auth')
     from app.user.routes import user_bp
     app.register_blueprint(user_bp)
 
