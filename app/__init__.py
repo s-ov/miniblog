@@ -1,8 +1,10 @@
 from flask import Flask
+from flask_mail import Mail
 from app.extensions import (
     db, migrate, login, mail, moment, babel,
     )
 from config import Config
+from app import constants
 
 
 def create_app():
@@ -10,7 +12,9 @@ def create_app():
 
     app = Flask(__name__,)
     app.config.from_object(Config)
-    app.config['UPLOAD_FOLDER'] = Config.UPLOAD_FOLDER
+
+    app.config['MAIL_USERNAME'] = constants.MAIL_USERNAME
+    app.config['MAIL_PASSWORD'] = constants.MAIL_PASSWORD
 
     db.init_app(app)
     migrate.init_app(app, db)

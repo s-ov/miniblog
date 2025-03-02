@@ -33,7 +33,6 @@ from app.user.services import (
     allowed_file, 
     follow_user, 
     unfollow_user, 
-    send_reset_email,
     )
 
 user_bp = Blueprint(

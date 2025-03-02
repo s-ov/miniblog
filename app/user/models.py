@@ -1,9 +1,8 @@
-# from itsdangerous import URLSafeTimedSerializer as Serializer
-from itsdangerous import TimedSerializer as Serializer
+from itsdangerous import URLSafeTimedSerializer as Serializer, BadSignature, SignatureExpired
+from flask import current_app
 import jwt
 from app import db
 from config import Config
-from flask import current_app
 from flask_login import UserMixin
 from werkzeug.security import (
     generate_password_hash, check_password_hash,
@@ -64,31 +63,18 @@ class User(UserMixin, db.Model):
             return False  
         return self.followed.filter(followers.c.followed_id == user.id).count() > 0
     
-    def get_reset_token(self, expires_sec=600):
-        """Generate a secure token for password reset (default: 5 minutes)."""
-        serializer = Serializer(Config.SECRET_KEY, expires_sec)
-        return serializer.dumps({'user_id': self.id}).decode('utf-8')
+    def get_reset_token(self, expires_sec=1800):
+        """Generate reset token for user"""
+        serializer = Serializer(current_app.config['SECRET_KEY'])
+        token = serializer.dumps({'user_id': self.id}, salt="password-reset")
+        print(f"Generated token: {token}")  
+        return token
     
     @staticmethod
-    def verify_reset_token(token):
-        serializer = Serializer(Config.SECRET_KEY)
+    def verify_reset_token(token, expires_sec=1800):
+        serializer = Serializer(current_app.config['SECRET_KEY'])
         try:
-            user_id = serializer.loads(token)['user_id']
-        except:
-            return 
+            user_id = serializer.loads(token, salt="password-reset", max_age=1800)['user_id']
+        except (BadSignature, SignatureExpired):
+            return None
         return User.query.get(user_id)
-    
-    def get_reset_password_token(self, expires_in=600):
-        """Generate a secure token for password reset (default: 5 minutes)."""
-        return jwt.encode(
-            {'reset_password': self.id, 'exp': datetime.now() + expires_in},
-            Config.SECRET_KEY, algorithm='HS256')
-
-    @staticmethod
-    def verify_reset_password_token(token):
-        try:
-            id = jwt.decode(token, Config.SECRET_KEY,
-                            algorithms=['HS256'])['reset_password']
-        except:
-            return 
-        return db.session.get(User, id)

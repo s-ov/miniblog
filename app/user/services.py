@@ -34,7 +34,7 @@ def allowed_file(filename):
 def send_reset_email(user):
     """Sends a password reset email to the user."""
     token = user.get_reset_token()  
-    reset_link = url_for('user.reset_password', token=token, _external=True)
+    reset_link = url_for('auth.reset_password', token=token, _external=True)
 
     msg = Message(
         'Password Reset Request',
@@ -46,4 +46,9 @@ def send_reset_email(user):
                     If you did not make this request, simply ignore this email. 
                     This link will expire in 30 minutes.
                 '''
-    mail.send(msg)
+    try:
+        print(f"BEFORE Email sent to {user.email}")
+        mail.send(msg)
+        print(f"Email sent to {user.email}")
+    except Exception as e:
+        print(f"Error sending email: {e}")
